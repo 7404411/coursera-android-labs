@@ -93,7 +93,7 @@ public class AddToDoActivity extends Activity {
 
 
 				// TODO - Indicate result and finish
-
+				AddToDoActivity.this.finish();
                 
                 
 			}
@@ -108,7 +108,7 @@ public class AddToDoActivity extends Activity {
 
 				// TODO - Reset data to default values
 
-
+				setDefaultFields();
                 
                 
                 
@@ -131,14 +131,34 @@ public class AddToDoActivity extends Activity {
 
 				// TODO - Get the current Priority
 				Priority priority = null;
+				switch (mPriorityRadioGroup.getCheckedRadioButtonId()) {
+				case R.id.lowPriority:
+					priority = Priority.LOW;
+					break;
+				case R.id.medPriority:
+					priority = Priority.MED;
+					break;
+				case R.id.highPriority:
+					priority = Priority.HIGH;
+					break;
+				}
 
 				// TODO - Get the current Status
 				Status status = null;
+				switch (mStatusRadioGroup.getCheckedRadioButtonId()) {
+				case R.id.statusNotDone:
+					status = Status.NOTDONE;
+					break;
+				case R.id.statusDone:
+					status = Status.DONE;
+					break;
+				}
 
 				// TODO - Get the current ToDoItem Title
 
 
-				String titleString = null;
+				String titleString = mTitleText.getText().toString();
+
 
 
 				// Construct the Date string
@@ -150,14 +170,21 @@ public class AddToDoActivity extends Activity {
 						fullDate);
 
 				// TODO - return data Intent and finish
-
-
-
-
+				data.setClass(AddToDoActivity.this, ToDoItem.class);
+				setResult(RESULT_OK, data);
+				finish();
+   
             
-            
-			}
+				}
 		    });
+	}
+		
+	
+	private void setDefaultFields() {
+		mTitleText.setText("");
+		mPriorityRadioGroup.check(R.id.medPriority);
+		mStatusRadioGroup.check(R.id.statusNotDone);
+		// or setChecked(boolean)
 	}
 
 	// Do not modify below this point.

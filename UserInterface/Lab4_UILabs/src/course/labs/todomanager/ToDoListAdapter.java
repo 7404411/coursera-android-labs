@@ -3,8 +3,10 @@ package course.labs.todomanager;
 import java.util.ArrayList;
 import java.util.List;
 
+import course.labs.todomanager.ToDoItem.Status;
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,6 +20,8 @@ public class ToDoListAdapter extends BaseAdapter {
 
 	private final List<ToDoItem> mItems = new ArrayList<ToDoItem>();
 	private final Context mContext;
+	private static LayoutInflater inflater = null;
+
 
 	private static final String TAG = "Lab-UserInterface";
 
@@ -80,16 +84,41 @@ public class ToDoListAdapter extends BaseAdapter {
 	// Consider using the ViewHolder pattern to make scrolling more efficient
 	// See: http://developer.android.com/training/improving-layouts/smooth-scrolling.html
 	
+	private static class Holder {
+		public TextView titleView;
+		public CheckBox checkbox;
+		public TextView priorityView;
+		public TextView dateView;
+	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		// TODO - Get the current ToDoItem
-		final ToDoItem toDoItem = null;
+		final ToDoItem toDoItem = mItems.get(position);
+		Holder holder = new Holder();
+		View itemLayout;
+//		if(convertView == null){
+		itemLayout = inflater.inflate(R.layout.todo_item, null);
+		holder.titleView = (TextView) itemLayout.findViewById(R.id.titleView);
+		holder.checkbox = (CheckBox) itemLayout.findViewById(R.id.statusCheckBox);
+		holder.priorityView = (TextView) itemLayout.findViewById(R.id.priorityView);
+		holder.dateView = (TextView) itemLayout.findViewById(R.id.dateView);
+		holder.titleView.setText(toDoItem.getTitle().toString());
+		if(toDoItem.getStatus() == Status.DONE){
+			holder.checkbox.setChecked(true);		
+		}
+		else{
+			holder.checkbox.setChecked(false);			
+		}
+		holder.priorityView.setText(toDoItem.getPriority().toString());
+//		holder.dateView.setText(toDoItem.getDate().toString());
+		holder.dateView.setText(ToDoItem.FORMAT.format(toDoItem.getDate()));
 
 
 		// TODO - Inflate the View for this ToDoItem
 		// from todo_item.xml
-		RelativeLayout itemLayout = null;
+//		RelativeLayout itemLayout = null;
 
 		// Fill in specific ToDoItem data
 		// Remember that the data that goes in this View
@@ -97,11 +126,11 @@ public class ToDoListAdapter extends BaseAdapter {
 		// in the layout file
 
 		// TODO - Display Title in TextView
-		final TextView titleView = null;
+		final TextView titleView = holder.titleView;
 
 
 		// TODO - Set up Status CheckBox
-		final CheckBox statusView = null;
+		final CheckBox statusView = holder.checkbox;
 
 
 		// TODO - Must also set up an OnCheckedChangeListener,
@@ -111,27 +140,23 @@ public class ToDoListAdapter extends BaseAdapter {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
-
-
-
-                        
-                        
-                        
-					}
+						buttonView.toggle();
+				}
 				});
 
 		// TODO - Display Priority in a TextView
-		final TextView priorityView = null;
+		final TextView priorityView = holder.priorityView;
 
 
 
 		// TODO - Display Time and Date.
 		// Hint - use ToDoItem.FORMAT.format(toDoItem.getDate()) to get date and
 		// time String
-		final TextView dateView = null;
+		final TextView dateView = holder.dateView;
 
 		// Return the View you just created
 		return itemLayout;
-
+//	}
+//		return itemLayout;
 	}
 }
