@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ListView;
 import android.widget.TextView;
 import course.labs.todomanager.ToDoItem.Priority;
 import course.labs.todomanager.ToDoItem.Status;
@@ -30,7 +31,6 @@ public class ToDoManagerActivity extends ListActivity {
 	private static final int ADD_TODO_ITEM_REQUEST = 0;
 	private static final String FILE_NAME = "TodoManagerActivityData.txt";
 	private static final String TAG = "Lab-UserInterface";
-	private static LayoutInflater inflater = null;
 
 	// IDs for menu items
 	private static final int MENU_DELETE = Menu.FIRST;
@@ -42,25 +42,27 @@ public class ToDoManagerActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.i(TAG, "before entered ToDoManager");
-//		setContentView(R.layout.to_do_manager);
+		ListView listView = getListView();
 		Log.i(TAG, "entered ToDoManager");
 		// Create a new TodoListAdapter for this ListActivity's ListView
-		mAdapter = new ToDoListAdapter(getApplicationContext());
-		getListView().setAdapter(mAdapter);
 
 		// Put divider between ToDoItems and FooterView
-		getListView().setFooterDividersEnabled(true);
+		listView.setFooterDividersEnabled(true);
 
 		// TODO - Inflate footerView for footer_view.xml file
+		LayoutInflater inflater = getLayoutInflater();
 		TextView footerView = (TextView) inflater.inflate(R.layout.footer_view, null);
+		Log.i(TAG, "after inflater");
 
+		mAdapter = new ToDoListAdapter(getApplicationContext());
+		listView.setAdapter(mAdapter);
 
 		// NOTE: You can remove this block once you've implemented the assignment
 //		if (null == footerView) {
 //			return;
 //		}
 		// TODO - Add footerView to ListView
-		getListView().addView(footerView);
+		listView.addView(footerView);
 
 
 		
